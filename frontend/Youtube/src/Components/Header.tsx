@@ -1,6 +1,6 @@
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
-import { renderToString } from 'react-dom/server';
+import {Link} from 'react-router-dom';
 
 export default function Header(){
 
@@ -20,7 +20,7 @@ export default function Header(){
                     <MenuIcon/>
                 </div>
                 <div className='yticon'>
-                    <img src='./public/assets/youtube.png' width={110}/>
+                    <Link to={"/"}><img src='../assets/youtube.png' width={110}/></Link>
                 </div>
                 <div className='inputDiv'>
                         <form style={{display: "flex"}}>
