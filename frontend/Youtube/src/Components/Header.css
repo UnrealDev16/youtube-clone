@@ -1,0 +1,43 @@
+.menuicon{
+    padding: 12px 20px;
+}
+
+.yticon{
+    position: relative;
+    top:7px;
+}
+
+.inputDiv{
+    position: relative;
+    justify-content: center;
+    align-self: center;
+    margin: auto;
+    right: 140px;
+}
+
+#inputBox{
+    border-radius: 50px 0px 0px 50px;
+    height: 35px;  
+    width: 27vw;
+    border-color: black;
+    border-width: 2px;
+    border-style: solid;
+    text-indent: 10px;
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.searchIconDiv{
+    background-color: #2a2834;
+    border-radius: 0px 50px 50px 0px;
+    width: 50px;
+    border-color: black;
+    border-style: solid;
+    border-width: 2px;
+}
+
+@media screen and (max-width: 655px) {
+    #inputBox{
+        width: 20vh;
+    }
+}
