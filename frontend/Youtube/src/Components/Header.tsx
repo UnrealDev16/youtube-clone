@@ -1,6 +1,8 @@
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import {Link} from 'react-router-dom';
+import Cookies from 'js-cookie'
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 
 export default function Header(){
 
@@ -15,7 +17,7 @@ export default function Header(){
     
     return (
         <div>
-            <div style={{display: "flex", height: 45}}>
+            <div className='headerDiv' style={{display: "flex", height: 50}}>
                 <div className='menuicon'>
                     <MenuIcon/>
                 </div>
@@ -30,6 +32,16 @@ export default function Header(){
                             </button>
                         </form>
                 </div>
+                {!Cookies.get("email") &&
+                    <div className="signInBtnDiv">
+                        <button className='signInBtn'>Sign in</button>
+                    </div>
+                }
+                {Cookies.get("email") &&
+                    <div className='videoUploadDiv'>
+                        <Link to={"/newvid"}><FileUploadIcon style={{position: "relative",top: 2.5, left: 2.5}}/></Link>
+                    </div>
+                }
             </div>
         </div>
     )

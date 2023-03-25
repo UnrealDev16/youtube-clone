@@ -1,3 +1,13 @@
+.headerDiv{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #242424;
+    height: fit-content;
+    z-index: 2;
+}
+
 .menuicon{
     padding: 12px 20px;
 }
@@ -7,13 +17,12 @@
     top:7px;
 }
 
-.inputDiv{
-    position: relative;
-    justify-content: center;
-    align-self: center;
-    margin: auto;
-    right: 7vw;
-}
+.inputDiv {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 
 #inputBox{
     border-radius: 50px 0px 0px 50px;
@@ -38,9 +47,60 @@
 
 @media screen and (max-width: 655px) {
     #inputBox{
-        width: 20vh;
+        width: 10vh;
+        position: relative;
+        right: 17vw;
+    }
+    .searchIconDiv{
+        position: relative;
+        right: 17vw;
+    }
+    .signInBtnDiv{
+        position: relative;
+        left: 83vw;
     }
     .yticon{
         display: none;
     }
+}
+
+.signInBtnDiv{
+    margin-right: 20px;
+}
+
+.signInBtn{
+    background-color: #242424;
+    border: solid black;
+    border-width: 1.9px;
+    border-radius: 20px;
+    font-size: 17px;
+    margin: 5px;
+    width: 100px;
+    height: 35px;
+    color: rgb(21, 132, 217);
+    cursor: pointer;
+    position: absolute;
+    top: 4px;
+    right: 0px;
+}
+
+.signInBtn:hover{
+    background-color: rgba(108, 122, 214, 0.532);
+}
+
+.videoUploadDiv{
+    margin: auto;
+    margin-right: 130px;
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
+    border-radius: 50px;
+    border: solid black;
+    background-color: #242424;
+    border-width: 2px;
+    margin-top: 10px;
+}
+
+.videoUploadDiv:hover {
+    background-color: rgba(108, 122, 214, 0.532);
 }
