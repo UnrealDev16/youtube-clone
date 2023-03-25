@@ -1,10 +1,11 @@
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
-import {Link} from 'react-router-dom';
+import {Link, Navigate} from 'react-router-dom';
 import Cookies from 'js-cookie'
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 
-export default function Header(){
+
+export default function Header(props:any){
 
     function searchVideo(event:any){
         event.preventDefault()
@@ -19,7 +20,7 @@ export default function Header(){
         <div>
             <div className='headerDiv' style={{display: "flex", height: 50}}>
                 <div className='menuicon'>
-                    <MenuIcon/>
+                    <MenuIcon onClick={props.toggleMenu}/>
                 </div>
                 <div className='yticon'>
                     <Link to={"/"}><img src='../assets/youtube.png' width={110}/></Link>
@@ -34,7 +35,7 @@ export default function Header(){
                 </div>
                 {!Cookies.get("email") &&
                     <div className="signInBtnDiv">
-                        <button className='signInBtn'>Sign in</button>
+                        <Link to="/login"><button className='signInBtn'>Sign in</button></Link>
                     </div>
                 }
                 {Cookies.get("email") &&

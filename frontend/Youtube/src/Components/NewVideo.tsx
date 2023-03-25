@@ -3,15 +3,15 @@ import { useRef } from 'react';
 import Button from '@mui/material/Button';
 
 export default function NewVideo(){
-    const fileInputRef = useRef(null);
+    const fileInputRef:any = useRef(null);
 
     const handleButtonClick = () => {
         fileInputRef.current.click();
     };
 
-    const handleFileSelected = (event) => {
+    const handleFileSelected = (event:any) => {
     const selectedFile = event.target.files[0];
-    // do something with the selected file
+    
   };
 
     return(
