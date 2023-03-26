@@ -1,35 +1,3 @@
-.homeBtn:hover{
-    background-color: rgb(37, 34, 34);
-}
-
-.shortsBtn:hover{
-    background-color: rgb(37, 34, 34);
-}
-
-.subsBtn:hover{
-    background-color: rgb(37, 34, 34);
-}
-
-.libBtn:hover{
-    background-color: rgb(37, 34, 34);
-}
-
-.hisBtn:hover{
-    background-color: rgb(37, 34, 34);
-}
-
-.urVidBtn:hover{
-    background-color: rgb(37, 34, 34);
-}
-
-.watchLaterBtn:hover{
-    background-color: rgb(37, 34, 34);
-}
-
-.likedBtn:hover{
-    background-color: rgb(37, 34, 34);
-}
-
 .sidebar{
     width: 255px;
     height: 1000px;
