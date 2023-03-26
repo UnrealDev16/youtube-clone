@@ -10,7 +10,7 @@ export default function Video(){
             {notFound ? (
                 <p>Video not found</p>
             ) : (
-                <video controls>
+                <video style={{marginTop: -50,marginLeft: 20}} controls autoPlay height={700} width={"1000"}>
                     <source type="video/mp4" src={`http://127.0.0.1:5000/video/${id}`} onError={() => setNotFound(true)}/>
                 </video>
             )}

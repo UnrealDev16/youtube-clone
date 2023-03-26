@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 videos
+.env
 
 # Editor directories and files
 .vscode/*

@@ -6,4 +6,5 @@
     overflow-x: hidden;
     background-color: rgb(5, 5, 5);
     margin-left: -10px;
+    z-index: 1;
 }

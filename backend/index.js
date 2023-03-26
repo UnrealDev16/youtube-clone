@@ -1,20 +1,28 @@
-const express = require("express")
-const cors = require("cors")
-const fs = require("fs")
-const path = require('path')
+const express = require("express");
+const cors = require("cors");
+const fs = require("fs");
+const path = require('path');
 const { MongoClient } = require("mongodb");
 
-const app = express()
-app.use(cors())
+const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const uri = "mongodb://127.0.0.1/";
-const client = new MongoClient(uri);
+const uri = "mongodb://127.0.0.1:27017/";
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-const db = client.db("mydb")
-const users = db.collection("users")
-const videos = db.collection("videos")
+client.connect(function (err) {
+  if(err){
+    console.log(err);
+  }
+  else{
+    console.log("Connected to Database");
+  }
+});
+
+const db = client.db("mydb");
+const videos = db.collection("videos");
 
 async function insertVideo(fileLoc,title,description,author,duration){
   let date_ob = new Date();
@@ -35,68 +43,65 @@ async function insertVideo(fileLoc,title,description,author,duration){
     comments: [[]],
     duration: duration,
     date: year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds
-  })
+  });
 }
 
 app.get('/video/:id', async (req, res) => {
-    try {
-      const range = req.headers.range;
-      const video = req.params.id;
-      console.log(video);
-      if (!range) {
-        return res.status(400).json({ error: 'Range not requested' });
-      }
-      const videoPath = path.join(__dirname, 'videos', `${video}.mp4`);
-      const videoSize = fs.statSync(videoPath).size;
-      if (!videoSize) {
-        return res.status(404).json({ error: 'Video not found' });
-      }
-  
-      const CHUNK_SIZE = 10 ** 6; // 1MB
-      const start = Number(range.replace(/\D/g, ''));
-      const end = Math.min(start + CHUNK_SIZE, videoSize - 1);
-  
-      const contentLength = end - start + 1;
-      const headers = {
-        'Content-Range': `bytes ${start}-${end}/${videoSize}`,
-        'Accept-Ranges': 'bytes',
-        'Content-Length': contentLength,
-        'Content-Type': 'video/mp4',
-      };
-  
-      res.writeHead(206, headers);
-  
-      const videoStream = fs.createReadStream(videoPath, { start, end });
-  
-      videoStream.pipe(res);
-    } catch (e) {
-      console.error(e);
-      res.status(500).json({ error: 'Internal server error' });
+  try {
+    const range = req.headers.range;
+    const video = req.params.id;
+    console.log(video);
+    if (!range) {
+      return res.status(400).json({ error: 'Range not requested' });
     }
-  });  
+    const videoPath = path.join(__dirname, 'videos', `${video}.mp4`);
+    const videoSize = fs.statSync(videoPath).size;
+    if (!videoSize) {
+      return res.status(404).json({ error: 'Video not found' });
+    }
 
-  app.get('/videos', (req, res) => {
-    const videosPath = path.join(__dirname, 'videos');
-    fs.readdir(videosPath, (err, files) => {
-      if (err) {
-        res.status(500).json({ error: 'Failed to read videos directory' });
-      } else {
-        const videoFiles = files.filter(file => file.endsWith('.mp4'));
-        const randomFiles = getRandomSubset(videoFiles, 10);
-        const videos = randomFiles.map(file => ({ id: path.parse(file).name }));
-        res.json(videos);
-      }
-    });
-  });
+    const CHUNK_SIZE = 10 ** 6; // 1MB
+    const start = Number(range.replace(/\D/g, ''));
+    const end = Math.min(start + CHUNK_SIZE, videoSize - 1);
 
-  app.post("/newvid",async (req,res) => {
-    console.log(req.body)
-  })
-  
-  function getRandomSubset(array, count) {
-    const shuffled = array.sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, count);
+    const contentLength = end - start + 1;
+    const headers = {
+      'Content-Range': `bytes ${start}-${end}/${videoSize}`,
+      'Accept-Ranges': 'bytes',
+      'Content-Length': contentLength,
+      'Content-Type': 'video/mp4',
+    };
+
+    res.writeHead(206, headers);
+
+    const videoStream = fs.createReadStream(videoPath, { start, end });
+
+    videoStream.pipe(res);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Internal server error' });
   }
-  
+});
 
-app.listen(5000)
+app.get('/videos', async (req, res) => {
+  try {
+    const db = client.db("mydb");
+    const videos = db.collection("videos");
+    const docs = await videos.find().limit(10).toArray();
+    return res.json(docs);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.post("/newvid", async (req, res) => {
+  
+});
+
+function getRandomSubset(array, count) {
+  const shuffled = array.sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
+}
+
+app.listen(5000);

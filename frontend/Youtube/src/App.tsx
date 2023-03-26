@@ -9,7 +9,8 @@ import Login from './Components/Login'
 import Home from './Components/Home'
 import NewVideo from './Components/NewVideo'
 import Sidebar from './Components/Sidebar'
-import zIndex from '@mui/material/styles/zIndex'
+
+export const BACKEND = "https://24e5-49-245-94-146.ap.ngrok.io"
 
 function App() {
 
