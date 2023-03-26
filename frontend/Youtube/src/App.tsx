@@ -9,6 +9,7 @@ import Login from './Components/Login'
 import Home from './Components/Home'
 import NewVideo from './Components/NewVideo'
 import Sidebar from './Components/Sidebar'
+import zIndex from '@mui/material/styles/zIndex'
 
 function App() {
 
@@ -19,19 +20,23 @@ function App() {
   };
 
   return (
-    <div>
+    <div >
       <Header toggleMenu={toggleMenu}/>
       <br/>
       <br/>
-      {burgerMenu &&
-        <Sidebar/>
-      }
+      <div style={{position: "absolute"}}>
+        {burgerMenu &&
+          <Sidebar/>
+        }
+      </div>
+      <div>
       <Routes>
         <Route path='/video/:id' element={<Video/>}/>
         <Route path='/' element={<Home/>}/>
         <Route path='/newvid' element={<NewVideo/>}/>
         <Route path='/login' element={<Login/>}/>
       </Routes>
+      </div>
     </div>
   )
 }
