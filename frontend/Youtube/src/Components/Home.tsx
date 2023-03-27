@@ -2,7 +2,7 @@ import VideoCard from "./VideoCard";
 import { useState,useEffect } from "react";
 import { BACKEND } from "../App";
 
-export default function Home(props){
+export default function Home(props:any){
 
     return(
         <div style={{marginLeft:10,display:"flex",flexWrap: 'wrap'}}>
