@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
 import Header from './Components/Header'
@@ -10,7 +10,7 @@ import Home from './Components/Home'
 import NewVideo from './Components/NewVideo'
 import Sidebar from './Components/Sidebar'
 
-export const BACKEND = "https://24e5-49-245-94-146.ap.ngrok.io"
+export const BACKEND = "http://127.0.0.1:5000"
 
 function App() {
 
@@ -19,6 +19,17 @@ function App() {
   const toggleMenu = () => {
     setMenu(!burgerMenu);
   };
+
+  const [data,setData] = useState([])
+    async function fetchData() {
+        const response = await fetch(`${BACKEND}/videos`);
+        const data = await response.json();
+        setData(data);
+    }
+    
+    useEffect(() => {
+        fetchData();
+    },[])
 
   return (
     <div >
@@ -32,8 +43,8 @@ function App() {
       </div>
       <div>
       <Routes>
-        <Route path='/video/:id' element={<Video/>}/>
-        <Route path='/' element={<Home/>}/>
+        <Route path='/video/:id' element={<Video data={data}/>}/>
+        <Route path='/' element={<Home data={data}/>}/>
         <Route path='/newvid' element={<NewVideo/>}/>
         <Route path='/login' element={<Login/>}/>
       </Routes>

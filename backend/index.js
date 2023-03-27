@@ -39,6 +39,7 @@ async function insertVideo(fileLoc,title,description,author,duration){
     title: title,
     desc: description,
     author: author,
+    views: 0,
     likes: 0,
     comments: [[]],
     duration: duration,
@@ -88,12 +89,33 @@ app.get('/videos', async (req, res) => {
     const db = client.db("mydb");
     const videos = db.collection("videos");
     const docs = await videos.find().limit(10).toArray();
-    return res.json(docs);
+    const videoArray = [];
+    docs.forEach((doc) => {
+      const videoObj = {
+        "video": doc.video,
+        "title": doc.title,
+        "author": doc.author,
+        "views": doc.views,
+        "duration": doc.duration,
+        "thumbnail": doc.thumbnail
+      };
+      videoArray.push(videoObj);
+    });
+    return res.json(videoArray);
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+app.get("/videoinfo",async (req,res) => {
+    const arg = req.query.id;
+    console.log(arg)
+    const foundVideo = await videos.findOne({
+      "video": arg
+    })
+    return res.json(foundVideo)
+})
 
 app.post("/newvid", async (req, res) => {
   
