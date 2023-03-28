@@ -11,6 +11,15 @@ export default function NewVideo(){
 
     const handleFileSelected = (event:any) => {
     const selectedFile = event.target.files[0];
+    fetch("http://127.0.0.1:5000/newvid",{
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: {
+            file: selectedFile
+        }
+    })
     
   };
 

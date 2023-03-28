@@ -2,6 +2,7 @@ import {useParams} from 'react-router-dom'
 import { useState,useEffect } from 'react'
 import { BACKEND } from '../App'
 import './Video.css'
+import Cookies from 'js-cookie'
 
 export default function Video(props:any){ 
     const { id } = useParams()
@@ -9,15 +10,23 @@ export default function Video(props:any){
     const [notFound, setNotFound] = useState(false)
     const [vidIndex,setVidIndex] = useState(null)
     const [data,setData] = useState([])
-    async function fetchData() {
-        const response = await fetch(`${BACKEND}/videoinfo?id=${id}`);
+    async function fetchData(event:any) {
+        event.preventDefault()
+        const response = await fetch(`${BACKEND}/videoinfo`,{
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                "email": Cookies.get("email"),
+                "videoName": id,
+            })
+        });
         const data = await response.json();
         setData(data);
         setVidIndex(data.findIndex((obj:any) => obj.video === id))
     }
     
     useEffect(() => {
-        fetchData();
+        fetchData(event);
     },[vidIndex])
 
     console.log(vidIndex)

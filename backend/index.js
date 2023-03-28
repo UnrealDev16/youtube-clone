@@ -3,6 +3,7 @@ const cors = require("cors");
 const fs = require("fs");
 const path = require('path');
 const { MongoClient } = require("mongodb");
+const crypto = require('crypto');
 
 const app = express();
 app.use(cors());
@@ -14,7 +15,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 client.connect(function (err) {
   if(err){
-    console.log(err);
+    console.log("Error connecting to Database");
   }
   else{
     console.log("Connected to Database");
@@ -23,6 +24,7 @@ client.connect(function (err) {
 
 const db = client.db("mydb");
 const videos = db.collection("videos");
+const users = db.collection("users")
 
 async function insertVideo(fileLoc,title,description,author,duration){
   let date_ob = new Date();
@@ -108,18 +110,85 @@ app.get('/videos', async (req, res) => {
   }
 });
 
-app.get("/videoinfo",async (req,res) => {
-    const arg = req.query.id;
-    console.log(arg)
-    const foundVideo = await videos.findOne({
-      "video": arg
+function hash(input) {
+  const salt = crypto.randomBytes(16).toString('hex');
+  const hash = crypto.createHash('sha512');
+  hash.update(input + salt);
+  return { salt, hash: hash.digest('hex') };
+}
+
+function verifyUser(input,salt,hash){
+  const verifyHash = crypto.createHash("sha512")
+  verifyHash.update(input + salt);
+  const verifyHashValue = veryifyHash.digest("hex")
+  return hash === verifyHashValue;
+}
+
+
+app.post("/videoinfo",async (req,res) => {
+  try{
+    const { email , videoName} = req.body;
+
+    const foundUser = users.findOne({
+      "email": email
     })
-    return res.json(foundVideo)
+
+    const foundVideo = await videos.findOne({
+      "video": videoName
+    })
+
+    const authorUser = await users.findOne({
+      "name": foundVideo.author
+    })
+
+    if(verifyUser( email , foundUser.salt , foundUser.hash)){
+      return res.json({
+        "title": foundVideo.title,
+        "description": foundVideo.desc,
+        "likes": foundVideo.likes,
+        "views": foundVideo.views,
+        "author": foundUser.name,
+        "comments": foundVideo.comments,
+        "date": foundVideo.date,
+        "subs": authorUser.subs,
+        "isAuthor": true
+      })
+    }
+    else{
+      return res.json({
+        "title": foundVideo.title,
+        "description": foundVideo.desc,
+        "likes": foundVideo.likes,
+        "views": foundVideo.views,
+        "author": foundUser.name,
+        "comments": foundVideo.comments,
+        "date": foundVideo.date,
+        "subs": authorUser.subs,
+        "isAuthor": false
+      })
+    }
+  }
+  catch(e){
+    console.log(e)
+    return res.status(400).json({"error": "No user found"})
+  }
 })
 
 app.post("/newvid", async (req, res) => {
-  
+    console.log(req.files.file)
 });
+
+app.post("/register", async (req,res) => {
+    const { name , email , password } = req.body
+    try{
+      const foundUser = await users.findOne({
+        "email": email
+      })
+    }
+    catch(e){
+        console.log("Hello")
+    }
+})
 
 function getRandomSubset(array, count) {
   const shuffled = array.sort(() => 0.5 - Math.random());
