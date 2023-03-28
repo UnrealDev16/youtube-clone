@@ -25,11 +25,4 @@ This is a demo Youtube clone app with a backend server and frontend (inspired by
 - Video streaming
 - Video upload
 - Video deletion
-
-## Contributing
-
-Contributions are always welcome! Please open an issue or pull request if you find any bugs or have any feature requests.
-
-## License
-This project is licensed under the MIT License.
   
