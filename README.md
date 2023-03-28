@@ -21,8 +21,8 @@ This is a demo Youtube clone app with a backend server and frontend (inspired by
 6. The app should now be running at http://localhost:5173
 
 ## Features
-- User registration and authentication
+- User registration and authentication (To be added)
 - Video streaming
-- Video upload
-- Video deletion
+- Video upload (To be added)
+- Video deletion (To be added)
   
