@@ -1,6 +1,7 @@
 import '../Components/NewVideo.css'
 import { useRef } from 'react';
 import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField'
 
 export default function NewVideo() {
     const fileInputRef = useRef(null);
@@ -32,8 +33,8 @@ export default function NewVideo() {
   
     return (
       <div>
-        <div>
           <form>
+            <center>
             <div className="fileInput">
               <Button
                 variant="contained"
@@ -53,18 +54,31 @@ export default function NewVideo() {
                 Select Files
               </Button>
               <form onSubmit={handleFileSelected}>
-                <input
-                  type="file"
-                  accept="video/mp4"
-                  ref={fileInputRef}
-                  style={{ display: "none" }}
-                  onChange={handleFileSelected}
-                />
-                <input type={"submit"} />
+                <br/>
+              <div>
+                <input className='input-box' type="text" placeholder="Title" required />
+              </div>
+              <br/>
+              <div>
+                <textarea className='input-box' placeholder="Description" required />
+              </div>
+                <input type="file" accept="video/mp4" ref={fileInputRef} style={{ display: "none" }} onChange={handleFileSelected} />
+                <Button variant='contained' style={{
+                  color: "black",
+                  borderRadius: "1.5px",
+                  backgroundColor: "#3ea6ff",
+                  width: 135,
+                  height:35,
+                  letterSpacing: "0.01em",
+                  fontWeight: 500,
+                  fontFamily: "sans-serif",
+                  fontSmooth: "antialiased",
+                  fontSize: 16,
+                }} type={"submit"}>Publish</Button>
               </form>
             </div>
+            </center>
           </form>
-        </div>
       </div>
     );
   }

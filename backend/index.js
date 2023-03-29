@@ -45,7 +45,7 @@ const db = client.db("mydb");
 const videos = db.collection("videos");
 const users = db.collection("users")
 
-async function insertVideo(fileLoc,title,description,author,duration){
+async function insertVideo(fileLoc,title,description,author,duration,thumbnail){
   let date_ob = new Date();
 
   let date = ("0" + date_ob.getDate()).slice(-2);
@@ -64,8 +64,25 @@ async function insertVideo(fileLoc,title,description,author,duration){
     likes: 0,
     comments: [[]],
     duration: duration,
-    date: year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds
+    date: year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds,
+    thumbnail: thumbnail
   });
+}
+
+async function insertUser(name,email,password,pfp){
+  const hashedEmail = hash(email)
+  const hashedPassword = hash(password)
+  users.insertOne({
+    "name": name,
+    "email": email,
+    "hashedEmail": hashedEmail.hash,
+    "emailSalt": hashedEmail.salt,
+    "password": hashedPassword.hash,
+    "passwordSalt": hashedPassword.salt,
+    "canPostVid": false,
+    "subscribers": 0,
+    "pfp": pfp ? pfp : "https://yt3.googleusercontent.com/ytc/AL5GRJWyltGcU7XxpYONvekC39Fey_MkP-Dqnz-i8_F_Yg=s900-c-k-c0x00ffffff-no-rj"
+  })
 }
 
 app.get('/video/:id', async (req, res) => {
@@ -122,6 +139,7 @@ app.get('/videos', async (req, res) => {
       };
       videoArray.push(videoObj);
     });
+    console.log(videoArray)
     return res.json(videoArray);
   } catch (e) {
     console.error(e);
@@ -139,7 +157,7 @@ function hash(input) {
 function verifyUser(input,salt,hash){
   const verifyHash = crypto.createHash("sha512")
   verifyHash.update(input + salt);
-  const verifyHashValue = veryifyHash.digest("hex")
+  const verifyHashValue = verifyHash.digest("hex")
   return hash === verifyHashValue;
 }
 
@@ -166,10 +184,11 @@ app.post("/videoinfo",async (req,res) => {
         "description": foundVideo.desc,
         "likes": foundVideo.likes,
         "views": foundVideo.views,
-        "author": foundUser.name,
+        "author": foundVideo.author,
         "comments": foundVideo.comments,
         "date": foundVideo.date,
-        "subs": authorUser.subs,
+        "subscribers": authorUser.subscribers,
+        "pfp": authorUser.pfp,
         "isAuthor": true
       })
     }
@@ -179,10 +198,11 @@ app.post("/videoinfo",async (req,res) => {
         "description": foundVideo.desc,
         "likes": foundVideo.likes,
         "views": foundVideo.views,
-        "author": foundUser.name,
+        "author": foundVideo.author,
         "comments": foundVideo.comments,
         "date": foundVideo.date,
-        "subs": authorUser.subs,
+        "subscribers": authorUser.subscribers,
+        "pfp": authorUser.pfp,
         "isAuthor": false
       })
     }

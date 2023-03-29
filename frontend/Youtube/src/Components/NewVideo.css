@@ -1,6 +1,12 @@
-.fileInput{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 64vh;
+.input-box{
+    border: 0px solid;
+    outline: none;
+    border-radius: 5px;
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+textarea{
+    width: 400px;
+    height: 200px;
 }

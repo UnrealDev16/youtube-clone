@@ -16,7 +16,7 @@ export default function Video(props:any){
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
-                "email": Cookies.get("email"),
+                "email": Cookies.get("email") ? Cookies.get("email") : "",
                 "videoName": id,
             })
         });
@@ -56,9 +56,9 @@ export default function Video(props:any){
 function ChannelBar(props:any){
     return(
         <div className='channelDiv'>
-            <img className='pfp' src='https://e1.pxfuel.com/desktop-wallpaper/401/499/desktop-wallpaper-mrbeast-channel-art-mrbeast-logo-thumbnail.jpg' width={45}/>
+            <img className='pfp' src={props?.data?.pfp} width={45}/>
             <h4 style={{position: "relative",bottom: 24,fontWeight: 500,left: 70,fontFamily: "Segoe UI"}}>{props?.data?.author}</h4>
-            <p style={{position: "relative",bottom: 45,fontSize: 12,left: 68,fontFamily: "Segoe UI"}}>1B subscribers</p>
+            <p style={{position: "relative",bottom: 45,fontSize: 12,left: 68,fontFamily: "Segoe UI"}}>{`${props?.data?.subscribers} subscribers`}</p>
             <button className='subBtn'>Subscribe</button>
         </div>
     )
