@@ -23,6 +23,6 @@ This is a demo Youtube clone app with a backend server and frontend (inspired by
 ## Features
 - User registration and authentication (To be added)
 - Video streaming
-- Video upload (To be added)
+- Video upload
 - Video deletion (To be added)
   
