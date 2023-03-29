@@ -4,11 +4,30 @@ const fs = require("fs");
 const path = require('path');
 const { MongoClient } = require("mongodb");
 const crypto = require('crypto');
+const multer  = require('multer');
+const ffprobe = require("ffprobe")
+const ffprobeStatic = require("ffprobe-static")
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+const storage = multer.diskStorage({
+  destination: function (req, res , cb) {
+    cb(null,"uploads");
+  },
+  filename: function (req, file, cb) {
+    if(file.mimetype === "video/mp4"){
+      cb(null, `${Date.now()}${path.extname(file.originalname)}`);
+    }
+    else{
+      cb(Error);
+    }
+  },
+})
+
+const upload = multer({ storage })
 
 const uri = "mongodb://127.0.0.1:27017/";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -173,9 +192,21 @@ app.post("/videoinfo",async (req,res) => {
     return res.status(400).json({"error": "No user found"})
   }
 })
+app.post("/newvid", upload.single("file") ,async (req, res) => {
+  const { title , description , author } = req.body;
+  const thumbnail = req.file.path;
+  const filePath = req.file.path;
 
-app.post("/newvid", async (req, res) => {
-    console.log(req.files.file)
+  ffprobe(filePath, { path: ffprobeStatic.path }, (err, info) => {
+    if (err) {
+      res.status(500).send("Error");
+    } else {
+      const totalSeconds = info.streams[0].duration
+      const minutes = Math.floor(totalSeconds / 60)
+      const seconds = Math.round(totalSeconds % 60)
+      res.sendStatus(200);
+    }
+  });
 });
 
 app.post("/register", async (req,res) => {
