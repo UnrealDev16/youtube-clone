@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
     cb(null,"uploads");
   },
   filename: function (req, file, cb) {
-    if(file.mimetype === "video/mp4"){
+    if(file.mimetype === "video/mp4" || file.mimetype === "image/png"){
       cb(null, `${Date.now()}${path.extname(file.originalname)}`);
     }
     else{
@@ -212,10 +212,11 @@ app.post("/videoinfo",async (req,res) => {
     return res.status(400).json({"error": "No user found"})
   }
 })
-app.post("/newvid", upload.single("file") ,async (req, res) => {
+app.post("/newvid", upload.any("file") ,async (req, res) => {
   const { title , description , author } = req.body;
-  const thumbnail = req.file.path;
-  const filePath = req.file.path;
+  console.log(req.files)
+  const thumbnail = req.files[1].path;
+  const filePath = req.files[0].path;
 
   ffprobe(filePath, { path: ffprobeStatic.path }, (err, info) => {
     if (err) {
