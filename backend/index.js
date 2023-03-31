@@ -233,9 +233,20 @@ app.post("/newvid", upload.any("file") ,async (req, res) => {
 app.post("/register", async (req,res) => {
     const { name , email , password } = req.body
     try{
-      const foundUser = await users.findOne({
-        "email": email
-      })
+      if(name && email && password){
+        const foundUser = await users.findOne({
+          "email": email
+        })
+        if(!foundUser){
+          insertUser(name,email,password)
+        }
+        else{
+          res.json({"status": "User already exist"})
+        }
+      }
+      else{
+        res.json({"status": "Fill all input fields"})
+      }
     }
     catch(e){
         console.log("Hello")
