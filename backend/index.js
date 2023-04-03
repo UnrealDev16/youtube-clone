@@ -231,14 +231,16 @@ app.post("/newvid", upload.any("file") ,async (req, res) => {
 });
 
 app.post("/register", async (req,res) => {
-    const { name , email , password } = req.body
+    const { username , email , password } = req.body
+    console.log(req.body)
     try{
-      if(name && email && password){
+      if(username && email && password){
         const foundUser = await users.findOne({
           "email": email
         })
         if(!foundUser){
-          insertUser(name,email,password)
+          insertUser(username,email,password)
+          res.json({"status": "Registered"})
         }
         else{
           res.json({"status": "User already exist"})
@@ -256,6 +258,11 @@ app.post("/register", async (req,res) => {
 function getRandomSubset(array, count) {
   const shuffled = array.sort(() => 0.5 - Math.random());
   return shuffled.slice(0, count);
+}
+
+function validateEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
 }
 
 app.listen(5000);

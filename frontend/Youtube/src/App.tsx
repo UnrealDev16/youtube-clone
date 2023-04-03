@@ -9,6 +9,7 @@ import Login from './Components/Login'
 import Home from './Components/Home'
 import NewVideo from './Components/NewVideo'
 import Sidebar from './Components/Sidebar'
+import Register from './Components/Register'
 
 export const BACKEND = "http://127.0.0.1:5000"
 
@@ -47,6 +48,7 @@ function App() {
         <Route path='/' element={<Home data={data}/>}/>
         <Route path='/newvid' element={<NewVideo/>}/>
         <Route path='/login' element={<Login/>}/>
+        <Route path='/register' element={<Register/>}/>
       </Routes>
       </div>
     </div>
