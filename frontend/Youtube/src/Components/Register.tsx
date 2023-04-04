@@ -1,8 +1,9 @@
-import { Link,useNavigate } from 'react-router-dom';
+import { Link,redirect,useNavigate } from 'react-router-dom';
 import './Register.css'
 import { Button } from '@mui/material'
 import { useRef, useState } from 'react'
 import { BACKEND } from '../App';
+import Cookies from 'js-cookie';
 
 export default function Register() {
 
@@ -32,7 +33,7 @@ export default function Register() {
                 })
             })
             .then(d => d.json())
-            .then(res => {setOutput(res);setTimeout(() => {
+            .then(res => {if(res.status==="Registered"){navigate("/");Cookies.set("email",res.email)};setOutput(res);setTimeout(() => {
                 setOutput("")
             }, 3000);})
         }

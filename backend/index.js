@@ -240,7 +240,10 @@ app.post("/register", async (req,res) => {
         })
         if(!foundUser){
           insertUser(username,email,password)
-          res.json({"status": "Registered"})
+          const insertedUser = await users.findOne({
+            "email": email
+          })
+          res.json({"status": "Registered","email": insertedUser.hashedEmail})
         }
         else{
           res.json({"status": "User already exist"})
