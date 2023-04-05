@@ -8,6 +8,9 @@ import Cookies from 'js-cookie';
 export default function Register() {
 
     const navigate = useNavigate()
+    if(Cookies.get("email")){
+      navigate("/")
+    }
 
     const username = useRef(null)
     const email = useRef(null)

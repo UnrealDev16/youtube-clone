@@ -6,8 +6,7 @@
     height: 38px;
     width: 100px;
     position: relative;
-    bottom: 95px;
-    left: 170px;
+    top: 48px;
     font-size: 15px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-weight: 500;
@@ -29,4 +28,5 @@
     position: relative;
     bottom: 70px;
     left: 10px;
+    display: flex;
 }

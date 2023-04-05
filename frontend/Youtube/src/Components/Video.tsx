@@ -56,10 +56,13 @@ export default function Video(props:any){
 function ChannelBar(props:any){
     return(
         <div className='channelDiv'>
-            <img className='pfp' src={props?.data?.pfp} width={45}/>
-            <h4 style={{position: "relative",bottom: 24,fontWeight: 500,left: 70,fontFamily: "Segoe UI"}}>{props?.data?.author}</h4>
-            <p style={{position: "relative",bottom: 45,fontSize: 12,left: 68,fontFamily: "Segoe UI"}}>{`${props?.data?.subscribers} subscribers`}</p>
+            <img className='pfp' src={props?.data?.pfp} width={45} height={45}/>
+            <h4 style={{position: "relative",fontWeight: 500,fontFamily: "Segoe UI",top: 25,left: 20}}>{props?.data?.author}</h4>
+            <p style={{position: "relative",fontSize: 12,fontFamily: "Segoe UI",width: "fit-content",top: 55,right: 30}}>{`${props?.data?.subscribers} subscribers`}</p>
             <button className='subBtn'>Subscribe</button>
+            <div className='RightSideBtns'>
+
+            </div>
         </div>
     )
 }
