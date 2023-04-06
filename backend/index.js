@@ -45,7 +45,7 @@ const db = client.db("mydb");
 const videos = db.collection("videos");
 const users = db.collection("users")
 
-async function insertVideo(fileLoc,title,description,author,duration,thumbnail){
+async function insertVideo(fileLoc,title,description,author,authorLink,duration,thumbnail){
   let date_ob = new Date();
 
   let date = ("0" + date_ob.getDate()).slice(-2);
@@ -60,6 +60,7 @@ async function insertVideo(fileLoc,title,description,author,duration,thumbnail){
     title: title,
     desc: description,
     author: author,
+    link: link,
     views: 0,
     likes: 0,
     comments: [[]],
@@ -69,7 +70,7 @@ async function insertVideo(fileLoc,title,description,author,duration,thumbnail){
   });
 }
 
-async function insertUser(name,email,password,pfp){
+async function insertUser(name,email,link,password,pfp){
   const hashedEmail = hash(email)
   const hashedPassword = hash(password)
   users.insertOne({
@@ -77,6 +78,7 @@ async function insertUser(name,email,password,pfp){
     "email": email,
     "hashedEmail": hashedEmail.hash,
     "emailSalt": hashedEmail.salt,
+    "link": link,
     "password": hashedPassword.hash,
     "passwordSalt": hashedPassword.salt,
     "canPostVid": false,
@@ -132,6 +134,7 @@ app.get('/videos', async (req, res) => {
       const videoObj = {
         "video": doc.video,
         "title": doc.title,
+        "link": doc.link,
         "author": doc.author,
         "views": doc.views,
         "duration": doc.duration,
@@ -183,6 +186,7 @@ app.post("/videoinfo",async (req,res) => {
         "title": foundVideo.title,
         "description": foundVideo.desc,
         "likes": foundVideo.likes,
+        "link": authorUser.link,
         "views": foundVideo.views,
         "author": foundVideo.author,
         "comments": foundVideo.comments,
@@ -197,6 +201,7 @@ app.post("/videoinfo",async (req,res) => {
         "title": foundVideo.title,
         "description": foundVideo.desc,
         "likes": foundVideo.likes,
+        "link": authorUser.link,
         "views": foundVideo.views,
         "author": foundVideo.author,
         "comments": foundVideo.comments,
@@ -231,19 +236,27 @@ app.post("/newvid", upload.any("file") ,async (req, res) => {
 });
 
 app.post("/register", async (req,res) => {
-    const { username , email , password } = req.body
+    const { username , email , password , link } = req.body
     console.log(req.body)
     try{
-      if(username && email && password){
+      if(username && email && password && link){
         const foundUser = await users.findOne({
           "email": email
         })
+        const linkUser = await users.findOne({
+          "link": link
+        })
         if(!foundUser){
-          insertUser(username,email,password)
-          const insertedUser = await users.findOne({
-            "email": email
-          })
-          res.json({"status": "Registered","email": insertedUser.hashedEmail})
+          if(!linkUser){
+            insertUser(username,email,link,password)
+            const insertedUser = await users.findOne({
+              "email": email
+            })
+            res.json({"status": "Registered","email": insertedUser.hashedEmail})
+          }
+          else{
+            res.json({"status": "Link already exist. Try another link"})
+          }
         }
         else{
           res.json({"status": "User already exist"})
@@ -256,6 +269,10 @@ app.post("/register", async (req,res) => {
     catch(e){
         console.log("Hello")
     }
+})
+
+app.post("/user",async (req,res) => {
+  const { email,user } = req.body;
 })
 
 function getRandomSubset(array, count) {

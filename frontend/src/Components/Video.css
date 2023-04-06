@@ -1,0 +1,32 @@
+.subBtn{
+    color:black;
+    background-color: white;
+    border: solid 0px;
+    border-radius: 20px;
+    height: 38px;
+    width: 100px;
+    position: relative;
+    top: 48px;
+    font-size: 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.subBtn:hover{
+    background-color: rgb(218, 218, 218);
+}
+
+.pfp{
+    border-radius: 50px;
+    position: relative;
+    top: 48px;
+    left: 10px;
+}
+
+.channelDiv{
+    position: relative;
+    bottom: 70px;
+    left: 10px;
+    display: flex;
+}
