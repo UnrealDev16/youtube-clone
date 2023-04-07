@@ -271,8 +271,23 @@ app.post("/register", async (req,res) => {
     }
 })
 
-app.post("/user",async (req,res) => {
+app.post("/user", async (req,res) => {
   const { email,user } = req.body;
+  const foundChannel = await users.findOne({
+    link: user
+  })
+  const foundVideos = await videos.find({
+    link: user
+  }).toArray()
+  console.log(foundVideos)
+  if(foundChannel && foundVideos && foundChannel.email !== email){
+    res.json({
+      "name": foundChannel.name,
+      "subscribers": foundChannel.subscribers,
+      "pfp": foundChannel.pfp,
+      "videos": foundVideos
+    })
+  }
 })
 
 function getRandomSubset(array, count) {
