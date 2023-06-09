@@ -1,4 +1,4 @@
-import { Link,redirect,useNavigate } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import './Register.css'
 import { Button } from '@mui/material'
 import { useRef, useState } from 'react'

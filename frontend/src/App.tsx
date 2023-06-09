@@ -12,7 +12,7 @@ import Sidebar from './Components/Sidebar'
 import Register from './Components/Register'
 import User from './Components/User'
 
-export const BACKEND = "http://127.0.0.1:5000"
+export const BACKEND = "http://127.0.0.1:5001"
 
 function App() {
 

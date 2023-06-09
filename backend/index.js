@@ -91,7 +91,6 @@ app.get('/video/:id', async (req, res) => {
   try {
     const range = req.headers.range;
     const video = req.params.id;
-    console.log(video);
     if (!range) {
       return res.status(400).json({ error: 'Range not requested' });
     }
@@ -119,7 +118,6 @@ app.get('/video/:id', async (req, res) => {
 
     videoStream.pipe(res);
   } catch (e) {
-    console.error(e);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -142,7 +140,6 @@ app.get('/videos', async (req, res) => {
       };
       videoArray.push(videoObj);
     });
-    console.log(videoArray)
     return res.json(videoArray);
   } catch (e) {
     console.error(e);
@@ -237,7 +234,6 @@ app.post("/newvid", upload.any("file") ,async (req, res) => {
 
 app.post("/register", async (req,res) => {
     const { username , email , password , link } = req.body
-    console.log(req.body)
     try{
       if(username && email && password && link){
         const foundUser = await users.findOne({
@@ -290,6 +286,24 @@ app.post("/user", async (req,res) => {
   }
 })
 
+app.post("/login",async (req,res) => {
+  const { email , password } = req.body
+  if(email && password){
+    const foundUser = await users.findOne({
+      email: email
+    })
+
+    if(foundUser){
+      if(verifyUser(password,foundUser.passwordSalt,foundUser.password)){
+        console.log("Password Matched")
+      }
+    }
+    else{
+      console.log("User not found")
+    }
+  }
+})
+
 function getRandomSubset(array, count) {
   const shuffled = array.sort(() => 0.5 - Math.random());
   return shuffled.slice(0, count);
@@ -300,4 +314,4 @@ function validateEmail(email) {
   return emailRegex.test(email);
 }
 
-app.listen(5000);
+app.listen(5001);
