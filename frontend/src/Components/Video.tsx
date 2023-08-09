@@ -37,7 +37,6 @@ export default function Video(props: any) {
   const [notFound, setNotFound] = useState(false);
   const [vidIndex, setVidIndex] = useState(null);
   const [data, setData] = useState([]);
-  const [loopEnabled, setLoopEnabled] = useState(false);
 
   async function fetchData(event: any) {
     event.preventDefault();
@@ -62,29 +61,20 @@ export default function Video(props: any) {
     return <p>Loading...</p>;
   }
 
-  const toggleLoop = () => {
-    const player = playerRef.current;
-    if (player) {
-      player.loop = !player.loop;
-      setLoopEnabled(player.loop);
-    }
-  };
-
   return (
     <div style={{ overflowX: 'hidden' }}>
-      <link href="https://vjs.zencdn.net/8.3.0/video-js.css" rel="stylesheet" />
+      <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
       {notFound ? (
         <p>Video not found</p>
       ) : (
         <div>
-          <video id="my-video" className='video-js' autoPlay controls style={{ outline: 'none', overflow: 'hidden', marginLeft: -10, width: '100dvw', height: '90dvh' }}>
+          <video id="player" autoPlay controls style={{ outline: 'none', overflow: 'hidden', marginLeft: -10, width: '100dvw', height: '90dvh' }}>
             <source type="video/mp4" src={`${BACKEND}/video/${id}`} onError={() => setNotFound(true)} />
           </video>
           <h3 style={{ position: 'relative', bottom: 15, fontWeight: 500, left: 25, fontFamily: 'Segoe UI' }}>{data?.title}</h3>
           <ChannelBar data={data} index={vidIndex} />
         </div>
       )}
-      <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
     </div>
   );
 }

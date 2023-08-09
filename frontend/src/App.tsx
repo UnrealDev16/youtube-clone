@@ -22,7 +22,7 @@ function App() {
     setMenu(!burgerMenu);
   };
 
-  const [data,setData] = useState([])
+    const [data,setData] = useState([])
     async function fetchData() {
         const response = await fetch(`${BACKEND}/videos`);
         const data = await response.json();
